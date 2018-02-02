@@ -12,6 +12,11 @@
       return context.app.canExecute("ExperienceEditor.AddVersion.CanAddVersion", context.currentContext);
     },
     execute: function (context) {
+      // Sitecore.Support.205035
+      var modeCookie = ExperienceEditor.Web.getUrlQueryStringValue("sc_site") + "#sc_mode";
+      if (ExperienceEditor.getPageEditingWindow().Sitecore.PageModes.Utility.getCookie(modeCookie) === "preview") {
+        ExperienceEditor.getPageEditingWindow().Sitecore.PageModes.Utility.setCookie(modeCookie, "edit");
+      }
       ExperienceEditor.modifiedHandling(true, function (isOk) {
         if (!ExperienceEditorContext.isModified || isOk) {
           ExperienceEditor.PipelinesUtil.generateRequestProcessor("ExperienceEditor.AddVersion.Execute", function(response) {
